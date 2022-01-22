@@ -40,5 +40,13 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
 })
 
 contextBridge.exposeInMainWorld('mainAPI', {
-  selectDir: () => ipcRenderer.invoke('selectDir')
+  selectDir: () => ipcRenderer.invoke('selectDir'),
+  savePath: (pathData) => ipcRenderer.invoke('savePath', pathData),
+  loadPath: () => ipcRenderer.invoke('loadPath'),
+  bundleOnce: (pathData) => ipcRenderer.invoke('bundleOnce', pathData),
+  bundleWatch: (pathData) => ipcRenderer.invoke('bundleWatch', pathData),
+  closeWatch: () => ipcRenderer.invoke('bundleWatch'),
+  bundlerLog: (listener) => {
+    ipcRenderer.on('bundlerLog', (event, arg) => listener(arg))
+  }
 })

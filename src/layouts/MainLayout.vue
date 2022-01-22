@@ -12,43 +12,21 @@
         <q-btn dense flat icon="close" @click="closeApp" />
       </q-bar>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title>
-          {{ title }}
-        </q-toolbar-title>
+        <q-toolbar-title>{{ title }}</q-toolbar-title>
 
         <div>v0.01</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+        <q-item-label header>Essential Links</q-item-label>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+        <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
       </q-list>
     </q-drawer>
-
     <q-page-container>
       <router-view @page-mounted="pageMounted" />
     </q-page-container>
@@ -67,7 +45,8 @@ const linksList = [
   }
 ]
 
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -77,8 +56,10 @@ export default defineComponent({
   },
 
   setup () {
+    const store = useStore()
     const leftDrawerOpen = ref(false)
-    const title = ref('타이틀')
+    const title = ref('루아 번들러')
+    console.log(store.state.glob)
 
     function minimize () {
       if (process.env.MODE === 'electron') {
@@ -111,7 +92,9 @@ export default defineComponent({
       title,
       minimize,
       toggleMaximize,
-      closeApp
+      closeApp,
+      isShowSideLog: computed(() => store.state.glob.isShowSideLog),
+      bundleLogs: computed(() => store.state.glob.bundleLogs)
     }
   }
 })

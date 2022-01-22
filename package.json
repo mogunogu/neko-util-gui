@@ -13,21 +13,27 @@
     "@electron/remote": "^2.0.1",
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
+    "chokidar": "^3.5.3",
     "core-js": "^3.6.5",
+    "electron-json-storage": "^4.5.0",
+    "lua-bundler": "git+https://github.com/mogunogu/lua-bundler.git",
     "quasar": "^2.0.0",
     "vuex": "^4.0.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
     "@quasar/app": "^3.0.0",
+    "@vue/devtools": "^6.0.0-beta.19",
     "electron": "^16.0.7",
+    "electron-packager": "^15.4.0",
     "eslint": "^7.14.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.0.0",
-    "eslint-webpack-plugin": "^2.4.0"
+    "eslint-webpack-plugin": "^2.4.0",
+    "webpack-bundle-analyzer": "^4.5.0"
   },
   "browserslist": [
     "last 10 Chrome versions",

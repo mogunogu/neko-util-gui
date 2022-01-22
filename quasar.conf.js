@@ -78,6 +78,7 @@ module.exports = configure(function (ctx) {
       server: {
         type: 'http'
       },
+      vueDevtools: true,
       port: 8080,
       open: true // opens browser window automatically
     },
@@ -97,7 +98,9 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify'
+      ]
     },
 
     // animations: 'all', // --- includes all animations
