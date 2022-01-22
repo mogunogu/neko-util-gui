@@ -3,12 +3,12 @@ import { initialize, enable } from '@electron/remote/main'
 import path from 'path'
 import os from 'os'
 import storage from 'electron-json-storage'
+import * as fs from 'fs/promises'
 const luabundle = require('lua-bundler')
 const chokidar = require('chokidar')
 
 initialize()
 storage.setDataPath(os.tmpdir())
-console.log(os.tmpdir)
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
@@ -85,6 +85,11 @@ ipcMain.handle('loadPath', (e) => {
       return resolve(data)
     })
   })
+})
+
+ipcMain.handle('validateProjPath', async (e, projPath) => {
+  const stat = await fs.stat(projPath)
+  console.log(stat)
 })
 
 const build = (e, pathData) => {

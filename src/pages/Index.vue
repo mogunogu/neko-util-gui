@@ -19,7 +19,10 @@
                 <q-btn icon="search" @click="selectProjPath">경로찾기</q-btn>
               </template>
             </q-input>
-            <q-input
+            <q-btn @click="validateProjPath">
+              noguri
+            </q-btn>
+            <!-- <q-input
               filled
               v-model="serverSrc"
               label="서버소스 경로"
@@ -48,7 +51,7 @@
               <template v-slot:append>
                 <q-btn icon="search" @click="selectClientSrc">경로찾기</q-btn>
               </template>
-            </q-input>
+            </q-input> -->
           </q-form>
         </div>
       </div>
@@ -58,7 +61,7 @@
             filled
             v-model="serverOutputFileName"
             label="서버 출력파일명"
-            hint=" 서버 출력파일명을 지정해주세요"
+            hint="ServerScript폴더에 설정한 파일명으로 저장됩니다."
             lazy-rules
             :rules="[
               val => val && val.length > 0 || '서버스크립트 출력 파일명을 지정해주세요',
@@ -71,7 +74,7 @@
             filled
             v-model="clientOutputFileName"
             label="클라 출력파일명"
-            hint=" 클라 출력파일명을 지정해주세요"
+            hint="Script폴더에 설정한 파일명으로 저장됩니다."
             lazy-rules
             :rules="[
               val => val && val.length > 0 || '클라이언트 스크립트 출력 파일명을 지정해주세요',
@@ -140,18 +143,17 @@ export default defineComponent({
     const store = useStore()
     const $q = useQuasar()
     const projectPath = ref('')
-    const serverSrc = ref('')
-    const clientSrc = ref('')
+    // const serverSrc = ref('')
+    // const clientSrc = ref('')
     const clientOutputFileName = ref('__bundle.lua')
     const serverOutputFileName = ref('__bundle.lua')
 
     const watchMode = ref(false)
-
     onMounted(async () => {
       const pathData = await window.mainAPI.loadPath()
       projectPath.value = pathData.projectPath
-      serverSrc.value = pathData.serverSrc
-      clientSrc.value = pathData.clientSrc
+      // serverSrc.value = pathData.serverSrc
+      // clientSrc.value = pathData.clientSrc
       window.mainAPI.bundlerLog((log) => {
         if (log.level === 3) {
           $q.notify({
@@ -183,31 +185,32 @@ export default defineComponent({
 
     const selectProjPath = async () => {
       const pathData = await window.mainAPI.selectDir()
+      console.log(pathData)
       if (pathData && pathData.canceled) {
         return
       }
       projectPath.value = pathData.filePaths[0]
     }
-    const selectServerSrc = async () => {
-      const pathData = await window.mainAPI.selectDir()
-      if (pathData && pathData.canceled) {
-        return
-      }
-      serverSrc.value = pathData.filePaths[0]
-    }
-    const selectClientSrc = async () => {
-      const pathData = await window.mainAPI.selectDir()
-      if (pathData && pathData.canceled) {
-        return
-      }
-      clientSrc.value = pathData.filePaths[0]
-    }
+    // const selectServerSrc = async () => {
+    //   const pathData = await window.mainAPI.selectDir()
+    //   if (pathData && pathData.canceled) {
+    //     return
+    //   }
+    //   serverSrc.value = pathData.filePaths[0]
+    // }
+    // const selectClientSrc = async () => {
+    //   const pathData = await window.mainAPI.selectDir()
+    //   if (pathData && pathData.canceled) {
+    //     return
+    //   }
+    //   clientSrc.value = pathData.filePaths[0]
+    // }
 
     const savePath = () => {
       window.mainAPI.savePath({
         projectPath: projectPath.value,
-        serverSrc: serverSrc.value,
-        clientSrc: clientSrc.value
+        clientOutput: clientOutputFileName.value,
+        serverOutput: serverOutputFileName.value
       }).then(res => {
         if (res) {
           alert('success')
@@ -218,8 +221,6 @@ export default defineComponent({
       store.commit('setIsShowSideLog', true)
       window.mainAPI.bundleOnce({
         projectPath: projectPath.value,
-        serverSrc: serverSrc.value,
-        clientSrc: clientSrc.value,
         clientOutputFileName: clientOutputFileName.value,
         serverOutputFileName: serverOutputFileName.value
       }).then(res => {
@@ -238,8 +239,6 @@ export default defineComponent({
       if (isWatchMode) {
         window.mainAPI.bundleWatch({
           projectPath: projectPath.value,
-          serverSrc: serverSrc.value,
-          clientSrc: clientSrc.value,
           clientOutputFileName: clientOutputFileName.value,
           serverOutputFileName: serverOutputFileName.value
         })
@@ -256,21 +255,24 @@ export default defineComponent({
         })
       }
     }
+
+    const validateProjPath = () => {
+      window.mainAPI.validateProjPath(projectPath.value)
+    }
     return {
       // data
       projectPath,
-      serverSrc,
-      clientSrc,
       clientOutputFileName,
       serverOutputFileName,
       selectProjPath,
-      selectServerSrc,
-      selectClientSrc,
+      // selectServerSrc,
+      // selectClientSrc,
       watchMode,
       // methods
       savePath,
       bundleOnce,
-      changeWatchMode
+      changeWatchMode,
+      validateProjPath
       // computed
     }
   }

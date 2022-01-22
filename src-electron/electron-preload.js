@@ -46,6 +46,7 @@ contextBridge.exposeInMainWorld('mainAPI', {
   bundleOnce: (pathData) => ipcRenderer.invoke('bundleOnce', pathData),
   bundleWatch: (pathData) => ipcRenderer.invoke('bundleWatch', pathData),
   closeWatch: () => ipcRenderer.invoke('bundleWatch'),
+  validateProjPath: (projPath) => ipcRenderer.invoke('validateProjPath', projPath),
   bundlerLog: (listener) => {
     ipcRenderer.on('bundlerLog', (event, arg) => listener(arg))
   }
